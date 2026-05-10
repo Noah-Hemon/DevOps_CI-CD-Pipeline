@@ -25,7 +25,7 @@ jobs:
         run: cd backend && npm ci
 
       - name: Run backend lint
-        run: cd backend && npx eslint .
+        run: cd backend && ESLINT_USE_FLAT_CONFIG=false npx eslint .
 
       - name: Run backend audit
         run: cd backend && npm audit --audit-level=moderate
@@ -40,7 +40,7 @@ jobs:
         run: cd frontend && npm ci
 
       - name: Run frontend lint
-        run: cd frontend && npm run lint
+        run: cd frontend && ESLINT_USE_FLAT_CONFIG=false npm run lint
 
       - name: Run frontend audit
         run: cd frontend && npm audit --audit-level=moderate
