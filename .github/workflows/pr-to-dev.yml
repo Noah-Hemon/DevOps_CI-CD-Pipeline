@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [dev]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Setup Snyk CLI
+        uses: snyk/actions/setup@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Install backend dependencies
+        run: cd backend && npm ci
+
+      - name: Run backend lint
+        run: cd backend && npx eslint .
+
+      - name: Run backend audit
+        run: cd backend && npm audit --audit-level=moderate
+
+      - name: Run backend snyk
+        run: cd backend && snyk test
+
+      - name: Run backend tests
+        run: cd backend && npm test
+
+      - name: Install frontend dependencies
+        run: cd frontend && npm ci
+
+      - name: Run frontend lint
+        run: cd frontend && npm run lint
+
+      - name: Run frontend audit
+        run: cd frontend && npm audit --audit-level=moderate
+
+      - name: Run frontend snyk
+        run: cd frontend && snyk test
+
+      - name: Run frontend tests
+        run: cd frontend && npm test
+
+      - name: Build backend image
+        run: docker build -t backend:pr-${{ github.sha }} -f backend/Dockerfile backend
+
+      - name: Build frontend image
+        run: docker build -t frontend:pr-${{ github.sha }} -f frontend/Dockerfile frontend
