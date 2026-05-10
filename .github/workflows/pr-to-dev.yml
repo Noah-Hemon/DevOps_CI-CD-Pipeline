@@ -25,11 +25,7 @@ jobs:
         run: cd backend && npm ci
 
       - name: Run backend lint
-<<<<<<< Updated upstream
-        run: cd backend && ESLINT_USE_FLAT_CONFIG=false npx eslint .
-=======
         run: cd backend && ESLINT_USE_FLAT_CONFIG=false npx eslint . --env jest
->>>>>>> Stashed changes
 
       - name: Run backend audit
         run: cd backend && npm audit --audit-level=moderate
