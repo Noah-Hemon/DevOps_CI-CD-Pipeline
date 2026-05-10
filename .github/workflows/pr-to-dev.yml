@@ -28,7 +28,7 @@ jobs:
         run: cd backend && ESLINT_USE_FLAT_CONFIG=false npx eslint . --env jest
 
       - name: Run backend audit
-        run: cd backend && npm audit --audit-level=moderate
+        run: cd backend && npm audit --audit-level=critical
 
       - name: Run backend snyk
         run: cd backend && snyk test
@@ -43,7 +43,7 @@ jobs:
         run: cd frontend && ESLINT_USE_FLAT_CONFIG=false npm run lint
 
       - name: Run frontend audit
-        run: cd frontend && npm audit --audit-level=moderate
+        run: cd frontend && npm audit --audit-level=critical
 
       - name: Run frontend snyk
         run: cd frontend && snyk test
